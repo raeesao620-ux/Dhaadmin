@@ -1,1 +1,253 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Department of Home Affairs - Republic of South Africa | Official Portal</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- PDF & QR Code Support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- 🔐 Login Screen -->
+  <div id="loginScreen" class="login-container flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md">
+      <div class="text-center mb-8">
+        <div class="sa-coat-of-arms mx-auto mb-4"></div>
+        <h1 class="text-2xl font-bold text-gray-800">Department of Home Affairs</h1>
+        <p class="text-gray-600">Republic of South Africa</p>
+        <div class="sa-flag w-full mt-2"></div>
+        <div class="dha-logo mt-3 mx-auto w-32">DHA OFFICIAL</div>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">ID Number</label>
+          <input type="text" id="citizenId" placeholder="Enter your 13-digit ID number" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Mobile Number</label>
+          <input type="tel" id="citizenMobile" placeholder="Enter mobile number" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+        </div>
+        <button onclick="loginCitizen()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Access Portal</button>
+        <div class="text-center text-xs text-gray-500 mt-4">
+          <p>🔒 Secure Government Portal • SSL Encrypted</p>
+          <p>📞 Support: 0800 60 11 90</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 🏛 Citizen Portal -->
+  <div id="citizenPortal" class="hidden">
+    <header class="gov-header text-white shadow-xl">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-6">
+          <div class="sa-coat-of-arms"></div>
+          <div>
+            <h1 class="text-3xl font-bold tracking-wide">DEPARTMENT OF HOME AFFAIRS</h1>
+            <p class="text-blue-200 text-lg font-medium">Republic of South Africa</p>
+            <p class="text-blue-100 text-sm">Batho Pele • Service Excellence • Ubuntu</p>
+          </div>
+        </div>
+        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">🚪 Logout</button>
+      </div>
+    </header>
+    <div class="bg-green-600 text-white text-center py-2">
+      <span class="animate-pulse">🟢 All Systems Operational</span>
+    </div>
+    <nav class="bg-blue-800 text-white">
+      <div class="container mx-auto px-4 flex justify-between py-3">
+        <div class="flex space-x-6">
+          <a href="#" onclick="showSection('servicesSection')" class="hover:text-yellow-300">Services</a>
+          <a href="#" onclick="showSection('certificatesSection')" class="hover:text-yellow-300">Certificates</a>
+          <a href="#" onclick="showSection('permitsSection')" class="hover:text-yellow-300">Permits</a>
+          <a href="#" onclick="showSection('trackSection')" class="hover:text-yellow-300">Track Application</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container mx-auto px-4 py-6">
+      <div id="servicesSection">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">DHA Services</h2>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div onclick="startApplication('smart-id')" class="p-5 bg-gray-50 border rounded-lg hover:shadow-lg cursor-pointer">
+              <h3 class="font-bold text-lg">Smart ID Card</h3>
+              <p class="text-sm text-gray-600">Replacement for green ID book</p>
+              <p class="mt-2 text-blue-600 font-medium">Processing: 8-10 days • Fee: R140</p>
+            </div>
+            <div onclick="startApplication('passport')" class="p-5 bg-gray-50 border rounded-lg hover:shadow-lg cursor-pointer">
+              <h3 class="font-bold text-lg">SA Passport</h3>
+              <p class="text-sm text-gray-600">International travel document</p>
+              <p class="mt-2 text-green-600 font-medium">Processing: 13-15 days • Fee: R400</p>
+            </div>
+            <div onclick="showSection('certificatesSection')" class="p-5 bg-gray-50 border rounded-lg hover:shadow-lg cursor-pointer">
+              <h3 class="font-bold text-lg">Certificates</h3>
+              <p class="text-sm text-gray-600">Birth, Marriage, Death</p>
+              <p class="mt-2 text-purple-600 font-medium">Apply Online</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="applicationForm" class="hidden bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h3 class="text-2xl font-bold mb-4" id="applicationTitle">Application</h3>
+        <div id="applicationSteps">
+          <div id="step1" class="form-step active">
+            <h4 class="text-lg font-semibold mb-4">Personal Information</h4>
+            <div class="grid md:grid-cols-2 gap-4">
+              <input id="fullNames" placeholder="Full Names" class="p-3 border rounded">
+              <input id="surname" placeholder="Surname" class="p-3 border rounded">
+              <input id="idNumber" placeholder="ID Number" class="p-3 border rounded">
+              <input id="dateOfBirth" type="date" class="p-3 border rounded">
+              <select id="gender" class="p-3 border rounded">
+                <option value="">Select Gender</option><option>Male</option><option>Female</option>
+              </select>
+              <input id="mobileNumber" placeholder="Mobile Number" class="p-3 border rounded">
+            </div>
+            <button onclick="nextStep()" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded">Next →</button>
+          </div>
+          <div id="step2" class="form-step hidden">
+            <h4 class="text-lg font-semibold mb-4">Upload Documents</h4>
+            <input type="file" id="idDoc" class="mb-2">
+            <input type="file" id="proofAddress" class="mb-2">
+            <input type="file" id="photo" class="mb-2">
+            <button onclick="prevStep()" class="bg-gray-500 text-white px-6 py-2 rounded">← Back</button>
+            <button onclick="nextStep()" class="bg-blue-600 text-white px-6 py-2 rounded">Next →</button>
+          </div>
+          <div id="step3" class="form-step hidden text-center">
+            <h4 class="text-lg font-semibold mb-4">Biometric Capture</h4>
+            <div class="biometric-capture w-48 h-48 mx-auto rounded-lg mb-4 relative">
+              <div class="fingerprint-pattern"></div>
+              <div class="scan-line"></div>
+            </div>
+            <button onclick="captureBiometrics()" class="bg-green-600 text-white px-6 py-2 rounded">📱 Capture Biometrics</button>
+            <p id="biometricStatus" class="mt-2 text-gray-600">Ready to capture</p>
+            <button onclick="nextStep()" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded">Next →</button>
+          </div>
+          <div id="step4" class="form-step hidden">
+            <h4 class="text-lg font-semibold mb-4">Review Application</h4>
+            <div id="applicationSummary" class="p-4 bg-gray-50 border rounded mb-4"></div>
+            <label><input type="checkbox" id="termsAccepted"> I declare info is true</label>
+            <button onclick="prevStep()" class="bg-gray-500 text-white px-6 py-2 rounded">← Back</button>
+            <button onclick="submitApplication()" class="bg-green-600 text-white px-6 py-2 rounded">🚀 Submit</button>
+          </div>
+        </div>
+      </div>
+      <div id="certificatesSection" class="hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <h2 class="text-2xl font-bold mb-4">Certificates</h2>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div onclick="startCertificate('birth')" class="p-5 border rounded hover:shadow cursor-pointer">Birth Certificate • R75</div>
+            <div onclick="startCertificate('marriage')" class="p-5 border rounded hover:shadow cursor-pointer">Marriage Certificate • R75</div>
+            <div onclick="startCertificate('death')" class="p-5 border rounded hover:shadow cursor-pointer">Death Certificate • R75</div>
+          </div>
+        </div>
+      </div>
+      <div id="permitsSection" class="hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <h2 class="text-2xl font-bold mb-4">Immigration Permits</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div onclick="startPermit('work')" class="p-5 border rounded hover:shadow cursor-pointer">Work Permit • R1520</div>
+            <div onclick="startPermit('study')" class="p-5 border rounded hover:shadow cursor-pointer">Study Permit • R1520</div>
+          </div>
+        </div>
+      </div>
+      <div id="trackSection" class="hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-xl font-bold mb-4">Track Application</h2>
+          <input type="text" id="trackingInput" placeholder="Enter Reference (e.g. ZA2024001234)" class="p-3 border rounded w-2/3">
+          <button onclick="trackApplication()" class="ml-2 bg-blue-600 text-white px-4 py-2 rounded">Track</button>
+          <div id="trackingResults" class="hidden mt-6 p-4 bg-gray-50 border rounded"></div>
+        </div>
+      </div>
+    </div>
+    <div id="aiAssistant" class="fixed bottom-4 right-4 bg-white shadow-lg rounded-lg p-4 w-64 border">
+      <h4 class="font-semibold text-blue-600">AI Assistant</h4>
+      <p id="assistantStatus" class="text-sm text-gray-700">Initializing...</p>
+    </div>
+  </div>
+  <div id="backOfficePortal" class="hidden">
+    <header class="gov-header text-white shadow-xl">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-6">
+          <div class="sa-coat-of-arms"></div>
+          <div>
+            <h1 class="text-3xl font-bold tracking-wide">DHA Back Office</h1>
+            <p class="text-blue-200 text-lg font-medium">Official Administrative Portal</p>
+            <p class="text-blue-100 text-sm">For Authorized Personnel Only</p>
+          </div>
+        </div>
+        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">🚪 Logout</button>
+      </div>
+    </header>
+    <nav class="bg-blue-900 text-white">
+      <div class="container mx-auto px-4 flex justify-between py-3">
+        <div class="flex space-x-6">
+          <a href="#" onclick="showBackOfficeSection('dashboardSection')" class="hover:text-yellow-300">Dashboard</a>
+          <a href="#" onclick="showBackOfficeSection('applicationsSection')" class="hover:text-yellow-300">Applications</a>
+          <a href="#" onclick="showBackOfficeSection('certificatesAdmin')" class="hover:text-yellow-300">Certificates</a>
+          <a href="#" onclick="showBackOfficeSection('permitsAdmin')" class="hover:text-yellow-300">Permits</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container mx-auto px-4 py-6">
+      <div id="dashboardSection">
+        <h2 class="text-2xl font-bold mb-4">System Dashboard</h2>
+        <div class="grid md:grid-cols-4 gap-6">
+          <div class="p-6 bg-green-100 rounded-lg shadow text-center">
+            <h3 class="text-xl font-semibold">Pending Apps</h3>
+            <p id="pendingApps" class="text-2xl font-bold">0</p>
+          </div>
+          <div class="p-6 bg-blue-100 rounded-lg shadow text-center">
+            <h3 class="text-xl font-semibold">Approved Apps</h3>
+            <p id="approvedApps" class="text-2xl font-bold">0</p>
+          </div>
+          <div class="p-6 bg-red-100 rounded-lg shadow text-center">
+            <h3 class="text-xl font-semibold">Rejected Apps</h3>
+            <p id="rejectedApps" class="text-2xl font-bold">0</p>
+          </div>
+          <div class="p-6 bg-yellow-100 rounded-lg shadow text-center">
+            <h3 class="text-xl font-semibold">Total Apps</h3>
+            <p id="totalApps" class="text-2xl font-bold">0</p>
+          </div>
+        </div>
+      </div>
+      <div id="applicationsSection" class="hidden">
+        <h2 class="text-2xl font-bold mb-4">Applications</h2>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <table class="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th class="py-2">Reference</th>
+                <th class="py-2">Name</th>
+                <th class="py-2">Status</th>
+                <th class="py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="applicationsTable">
+              <!-- Application rows will be dynamically added here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="certificatesAdmin" class="hidden">
+        <h2 class="text-2xl font-bold mb-4">Certificates Administration</h2>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <table class="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th class="py-2">Reference</th>
+                <th class="py-2">Name</th>
+                <th class="py-2">Type</th>
+                <th class="py-2">Status</th>
+                <th class="py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="certificatesTable">
+              <!-- Certificate rows will be dynamically added here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="permitsAdmin" class="hidden">
+        <h2 class="text-2xl font-bold mb-4">Permits Administration</h
