@@ -250,4 +250,29 @@
         </div>
       </div>
       <div id="permitsAdmin" class="hidden">
-        <h2 class="text-2xl font-bold mb-4">Permits Administration</h
+        <h2 class="text-2xl font-bold mb-4">Permits Administration</h <div id="certificatesSection" class="hidden">
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <h2 class="text-2xl font-bold mb-4">Certificates</h2>
+    <div id="certificatesList">
+      <!-- Fetched certificates will be displayed here -->
+    </div>
+  </div>
+</div>
+
+<div id="permitsSection" class="hidden">
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <h2 class="text-2xl font-bold mb-4">Immigration Permits</h2>
+    <div id="permitsList">
+      <!-- Fetched permits will be displayed here -->
+    </div>
+  </div>
+</div>
+
+<div id="backgroundCheckSection" class="hidden">
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-xl font-bold mb-4">Background Check</h2>
+    <input type="text" id="idNumberInput" placeholder="Enter ID Number">
+    <button onclick="performBackgroundCheck(document.getElementById('idNumberInput').value)" class="ml-2 bg-blue-600 text-white px-4 py-2 rounded">Check Background</button>
+    <div id="backgroundCheckResults" class="hidden mt-6 p-4 bg-gray-50 border rounded"></div>
+  </div>
+</div>
