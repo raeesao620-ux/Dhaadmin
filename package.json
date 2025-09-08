@@ -1,1 +1,15 @@
-
+{
+  "name": "dha-portal",
+  "version": "1.0.0",
+  "description": "Department of Home Affairs Portal",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'No start script needed'",
+    "build": "echo 'No build script needed'"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "tailwindcss": "^2.2.19"
+  }
+}
