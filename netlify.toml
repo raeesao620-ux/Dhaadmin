@@ -1,12 +1,17 @@
 [build]
-  publish = "."
-  command = "echo 'No build command needed'"
-[build]
-  publish = "public"
   command = "npm run build"
+  publish = "public"
+
+[functions]
+  directory = "netlify/functions"
 
 [context.production.environment]
   REACT_APP_API_KEY = "Kiyaan07"
-  REACT_APP_AUTH_URL = "www.dha.gov.za"
-  REACT_APP_PORTAL_URL = "www.dha.gov.za"
-  REACT_APP_BACK_OFFICE_URL = "www.dhadmin.gov.za"
+  REACT_APP_AUTH_URL = "https://www.dha.gov.za"
+  REACT_APP_PORTAL_URL = "https://www.dha.gov.za"
+  REACT_APP_BACK_OFFICE_URL = "https://www.dhadmin.gov.za"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
