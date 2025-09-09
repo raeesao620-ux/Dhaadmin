@@ -285,3 +285,62 @@ function logout() {
   document.getElementById('citizenPortal').classList.add('hidden');
   document.getElementById('backOfficePortal').classList.add('hidden');
 }
+// Citizen Portal-related functions
+export function showSection(sectionId) {
+  const sections = ['servicesSection', 'certificatesSection', 'permitsSection', 'trackSection'];
+  sections.forEach(section => {
+    document.getElementById(section).classList.add('hidden');
+  });
+  document.getElementById(sectionId).classList.remove('hidden');
+}
+
+export function startApplication(type) {
+  // Implement application start logic here
+  document.getElementById('applicationForm').classList.remove('hidden');
+  document.getElementById('applicationTitle').innerText = `Start ${type.charAt(0).toUpperCase() + type.slice(1)} Application`;
+}
+
+export function nextStep() {
+  const steps = document.querySelectorAll('.form-step');
+  let currentStep = Array.from(steps).findIndex(step => step.classList.contains('active'));
+  if (currentStep < steps.length - 1) {
+    steps[currentStep].classList.remove('active');
+    steps[currentStep].classList.add('hidden');
+    steps[currentStep + 1].classList.add('active');
+    steps[currentStep + 1].classList.remove('hidden');
+  }
+}
+
+export function prevStep() {
+  const steps = document.querySelectorAll('.form-step');
+  let currentStep = Array.from(steps).findIndex(step => step.classList.contains('active'));
+  if (currentStep > 0) {
+    steps[currentStep].classList.remove('active');
+    steps[currentStep].classList.add('hidden');
+    steps[currentStep - 1].classList.add('active');
+    steps[currentStep - 1].classList.remove('hidden');
+  }
+}
+
+export function captureBiometrics() {
+  // Implement biometric capture logic here
+  document.getElementById('biometricStatus').innerText = 'Capturing biometrics...';
+  setTimeout(() => {
+    document.getElementById('biometricStatus').innerText = 'Biometrics captured successfully';
+  }, 2000);
+}
+
+export function submitApplication() {
+  // Implement application submission logic here
+  const applicationSummary = document.getElementById('applicationSummary');
+  applicationSummary.innerHTML = `
+    <p><strong>Full Names:</strong> ${document.getElementById('fullNames').value}</p>
+    <p><strong>Surname:</strong> ${document.getElementById('surname').value}</p>
+    <p><strong>ID Number:</strong> ${document.getElementById('idNumber').value}</p>
+    <p><strong>Date of Birth:</strong> ${document.getElementById('dateOfBirth').value}</p>
+    <p><strong>Gender:</strong> ${document.getElementById('gender').value}</p>
+    <p><strong>Mobile Number:</strong> ${document.getElementById('mobileNumber').value}</p>
+  `;
+  document.getElementById('termsAccepted').checked = true;
+  alert('Application submitted successfully!');
+}
