@@ -238,3 +238,50 @@ window.onload = () => {
   fetchCertificates();
   fetchPermits();
 };
+  // Main JavaScript file to handle initial setup and routing
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize the application
+  initApp();
+});
+
+function initApp() {
+  // Show the login screen by default
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('citizenPortal').classList.add('hidden');
+  document.getElementById('backOfficePortal').classList.add('hidden');
+}
+
+function loginCitizen() {
+  // Implement login logic here
+  const citizenId = document.getElementById('citizenId').value;
+  const citizenMobile = document.getElementById('citizenMobile').value;
+
+  // Example API call to authenticate user
+  fetch(`${process.env.REACT_APP_AUTH_URL}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: citizenId, mobile: citizenMobile })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Redirect to citizen portal
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('citizenPortal').classList.remove('hidden');
+    } else {
+      alert('Login failed. Please check your credentials.');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+function logout() {
+  // Implement logout logic here
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('citizenPortal').classList.add('hidden');
+  document.getElementById('backOfficePortal').classList.add('hidden');
+}
